@@ -3,11 +3,16 @@
         <input type='text' ng-model='model.currType'></input>
         <p>Instanceof</p>
         <ul>
-            <li ng-repeat="type in model.primitiveTypes">{{type}}
-            {{model.checkInstanceOf(model.currType, type)}} {{model.currType}}</li>
+            <li ng-repeat="type in model.primitiveTypes" 
+                ng-style="{color:model.checkInstanceOf(model.currType, type.name)}">
+                {{type.name}}
+            </li>
         </ul>
 
         <ul>
-            <li ng-repeat="type in model.referenceTypes">{{type}}</li>
+            <li ng-repeat="type in model.referenceTypes"
+                ng-style="{color:model.checkInstanceOf(model.currType, type.name)}">
+                {{type.name}}
+            </li>
         </ul>
 </div>
