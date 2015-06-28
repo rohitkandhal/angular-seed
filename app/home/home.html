@@ -3,21 +3,18 @@
         <input type='text' ng-model='model.currType'></input>
         <p>Instanceof</p>
         <table class="table table-condensed">
-            <tr ng-repeat="type in model.primitiveTypes">
-                <td ng-style="{background:model.checkInstanceOf(model.currType, type.name)}">
-                    {{type.name}} 
-                </td>
-                <td>
-                    {{model.getTypeOf(type.name)}}
-                </td>
             <tr>
-
-            <tr ng-repeat="type in model.primitiveTypes">
+                <th>Instance of
+                </th>
+                <th>Type Of
+                </th>
+            </tr>
+            <tr ng-repeat="type in model.allTypes track by $index">
                 <td ng-style="{background:model.checkInstanceOf(model.currType, type.name)}">
                     {{type.name}} 
                 </td>
                 <td>
-                    {{model.getTypeOf(type.name)}}
+                    {{model.getTypeOf(type.getInstance())}}
                 </td>
             <tr>
         </table>

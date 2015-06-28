@@ -4,66 +4,101 @@ window.vjs = window.vjs || {};
 
     ns.HomeModel = HomeModel;
 
-    var TYPES_PRIM = Object.freeze(
+    var JS_TYPES = Object.freeze(
         [{
-            name: 'number'
+            name: 'number',
+            getInstance: function () {
+                return 007;
+            }
         }, {
-            name: 'string'
+            name: 'string',
+            getInstance: function () {
+                return "Hello World";
+            }
         }, {
-            name: 'boolean'
+            name: 'boolean',
+            getInstance: function () {
+                return true;
+            }
         }, {
-            name: 'null'
+            name: 'null',
+            getInstance: function () {
+                return null;
+            }
         }, {
-            name: 'undefined'
-        }]);
-
-    var TYPES_REF = Object.freeze(
-        [ {
+            name: 'undefined',
+            getInstance: function () {
+                return undefined;
+            }
+        }, {
             name: 'Object',
             isInstanceOf: function(value) {
                 return value instanceof Object;
+            },
+            getInstance: function () {
+                return new Object();
             }
         }, {
             name: 'Function',
             isInstanceOf: function(value) {
                 return value instanceof Function;
+            },
+            getInstance: function () {
+                return new Function();
             }
         }, {
             name: 'Array',
             isInstanceOf: function(value) {
                 return value instanceof Array;
+            },
+            getInstance: function () {
+                return new Array();
             }
         },  {
             name: 'Number',
             isInstanceOf: function(value) {
                 return value instanceof Number;
+            }, 
+            getInstance: function () {
+                return new Number();
             }
         },  {
             name: 'String',
             isInstanceOf: function(value) {
                 return value instanceof String;
+            },
+            getInstance: function () {
+                return new String();
             }
         }, {
             name: 'Boolean',
             isInstanceOf: function(value) {
                 return value instanceof Boolean;
+            }, 
+            getInstance: function (){
+                return new Boolean();
             }
         }, {
             name: 'RegExp',
             isInstanceOf: function(value) {
                 return value instanceof RegExp;
+            },
+            getInstance: function() {
+                return new RegExp();
             }
         }]);
 
     var RESULT_ENUM = Object.freeze({
-            true: 'green',
+            true: 'rgba(0,255,0,0.1)',
             false: 'rgba(255,0,0,0.1)',
             error: 'yellow'
         });
 
     function HomeModel() {
-        this.primitiveTypes = TYPES_PRIM;
-        this.referenceTypes = TYPES_REF;
+        this.allTypes = JS_TYPES;
+        // this.allTypes = TYPES_PRIM + TYPES_REF;
+        // this.primitiveTypes = TYPES_PRIM;
+        // this.referenceTypes = TYPES_REF;
         this.currType = '';
     }
     
@@ -71,20 +106,20 @@ window.vjs = window.vjs || {};
         // check if type is supported by app
        var isSupported = false, i = 0;
 
-       while(i < TYPES_PRIM.length && !isSupported) {
-        if(type === TYPES_PRIM[i].name) {
+       while(i < JS_TYPES.length && !isSupported) {
+        if(type === JS_TYPES[i].name) {
             isSupported = true;
         }
         i += 1;
        }
 
-        i = 0;
-       while(i < TYPES_REF.length && !isSupported) {
-        if(type === TYPES_REF[i].name) {
-            isSupported = true;
-        }
-        i += 1;
-       }
+       //  i = 0;
+       // while(i < TYPES_REF.length && !isSupported) {
+       //  if(type === TYPES_REF[i].name) {
+       //      isSupported = true;
+       //  }
+       //  i += 1;
+       // }
        return isSupported;
     };
 
@@ -93,7 +128,7 @@ window.vjs = window.vjs || {};
        var i = 0, result = false;
        if(isTypeSupported(type)) {
             // For primitive types instanceof will always be false 
-            if(isObject(inp )) {
+            if(isObject(inp)) {
                 result = RESULT_ENUM[inp instanceof type];    
             } else {
                 result = RESULT_ENUM[false];
