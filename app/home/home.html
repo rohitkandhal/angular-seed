@@ -2,17 +2,23 @@
         <h3>Home Page {{homeCtrl.homeModel}}</h3>
         <input type='text' ng-model='model.currType'></input>
         <p>Instanceof</p>
-        <ul>
-            <li ng-repeat="type in model.primitiveTypes" 
-                ng-style="{color:model.checkInstanceOf(model.currType, type.name)}">
-                {{type.name}}
-            </li>
-        </ul>
+        <table class="table table-condensed">
+            <tr ng-repeat="type in model.primitiveTypes">
+                <td ng-style="{background:model.checkInstanceOf(model.currType, type.name)}">
+                    {{type.name}} 
+                </td>
+                <td>
+                    {{model.getTypeOf(type.name)}}
+                </td>
+            <tr>
 
-        <ul>
-            <li ng-repeat="type in model.referenceTypes"
-                ng-style="{color:model.checkInstanceOf(model.currType, type.name)}">
-                {{type.name}}
-            </li>
-        </ul>
+            <tr ng-repeat="type in model.primitiveTypes">
+                <td ng-style="{background:model.checkInstanceOf(model.currType, type.name)}">
+                    {{type.name}} 
+                </td>
+                <td>
+                    {{model.getTypeOf(type.name)}}
+                </td>
+            <tr>
+        </table>
 </div>

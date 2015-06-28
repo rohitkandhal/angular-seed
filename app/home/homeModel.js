@@ -4,7 +4,7 @@ window.vjs = window.vjs || {};
 
     ns.HomeModel = HomeModel;
 
-    var TYPES_PRIMITIVE = Object.freeze(
+    var TYPES_PRIM = Object.freeze(
         [{
             name: 'number'
         }, {
@@ -17,7 +17,7 @@ window.vjs = window.vjs || {};
             name: 'undefined'
         }]);
 
-    var TYPES_REFERENCE = Object.freeze(
+    var TYPES_REF = Object.freeze(
         [ {
             name: 'Object',
             isInstanceOf: function(value) {
@@ -57,13 +57,13 @@ window.vjs = window.vjs || {};
 
     var RESULT_ENUM = Object.freeze({
             true: 'green',
-            false: 'red',
+            false: 'rgba(255,0,0,0.1)',
             error: 'yellow'
         });
 
     function HomeModel() {
-        this.primitiveTypes = TYPES_PRIMITIVE;
-        this.referenceTypes = TYPES_REFERENCE;
+        this.primitiveTypes = TYPES_PRIM;
+        this.referenceTypes = TYPES_REF;
         this.currType = '';
     }
     
@@ -71,16 +71,16 @@ window.vjs = window.vjs || {};
         // check if type is supported by app
        var isSupported = false, i = 0;
 
-       while(i < TYPES_PRIMITIVE.length && !isSupported) {
-        if(type === TYPES_PRIMITIVE[i].name) {
+       while(i < TYPES_PRIM.length && !isSupported) {
+        if(type === TYPES_PRIM[i].name) {
             isSupported = true;
         }
         i += 1;
        }
 
         i = 0;
-       while(i < TYPES_REFERENCE.length && !isSupported) {
-        if(type === TYPES_REFERENCE[i].name) {
+       while(i < TYPES_REF.length && !isSupported) {
+        if(type === TYPES_REF[i].name) {
             isSupported = true;
         }
         i += 1;
@@ -93,7 +93,7 @@ window.vjs = window.vjs || {};
        var i = 0, result = false;
        if(isTypeSupported(type)) {
             // For primitive types instanceof will always be false 
-            if(isObject(inp)) {
+            if(isObject(inp )) {
                 result = RESULT_ENUM[inp instanceof type];    
             } else {
                 result = RESULT_ENUM[false];
@@ -105,10 +105,14 @@ window.vjs = window.vjs || {};
        return result;
     }    
 
+    var getTypeOf = function (inp) {
+        return typeof inp;
+    }
+
     function isObject(value) {
         return value !== null && typeof value === 'object';
     }
 
     HomeModel.prototype.checkInstanceOf = checkInstanceOf;
-    
+    HomeModel.prototype.getTypeOf = getTypeOf;
 }(window.vjs));
