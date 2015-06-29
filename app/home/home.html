@@ -1,13 +1,42 @@
 <div ng-controller='HomeController as homeCtrl' ng-init="model = homeCtrl.homeModel">
-        <h3>Home Page {{homeCtrl.homeModel}}</h3>
-        <input type='text' ng-model='model.currType'></input>
+        <h3>Visualize JavaScript Types {{homeCtrl.homeModel}}</h3>
         <form name="typeSelectForm" class="form-inline">
-            <div ng-repeat="type in model.allTypes track by $index" class="form-control">
-                <input type='radio' ng-model='model.currTypeId' ng-value='{{$index}}'> {{type.name}}</input>
-            </div>
+            <table class="table table-bordered">
+                <tr>
+                    <th>
+                    </th>
+                    <th ng-repeat="type in model.allTypes track by $index" >
+                        <input type='radio'
+                               ng-model='model.currTypeId'
+                               ng-value='{{$index}}'
+                               class='text-center'> 
+                        {{type.name}}
+                        </input>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        instanceOf
+                    </td>
+                    <td ng-repeat="type in model.allTypes track by $index" 
+                        ng-style="{background:model.checkInstanceOf(model.currType, type)}"
+                        class='text-center'>
+                        {{type.name}} 
+                    </td>
+                <tr>
+                <tr>
+                    <td>
+                        typeof
+                    </td>
+                    <td ng-repeat="type in model.allTypes track by $index" 
+                        class='text-center'>
+                        {{model.getTypeOf(type.getInstance())}}
+                    </td>
+                <tr>
+            </table>            
         </form>
         <h2 class='text-center'>{{model.currType.name}}</h2>
-        <h3 class='text-center'>typeof: {{model.getTypeOf(model.currType.getInstance())}}</h3>
+        
         <table class="table table-condensed">
             <tr>
                 <th>Instance of

@@ -44,7 +44,7 @@ window.vjs = window.vjs || {};
                 return value instanceof Function;
             },
             getInstance: function () {
-                return new Function();
+                return new Function('a','return \'hello world\'');
             }
         }, {
             name: 'Array',
@@ -96,9 +96,6 @@ window.vjs = window.vjs || {};
 
     function HomeModel() {
         this.allTypes = JS_TYPES;
-        // this.allTypes = TYPES_PRIM + TYPES_REF;
-        // this.primitiveTypes = TYPES_PRIM;
-        // this.referenceTypes = TYPES_REF;
         this.currTypeId = 0;
     }
 
@@ -125,11 +122,12 @@ window.vjs = window.vjs || {};
     };
 
     var checkInstanceOf = function(src, target){
-       // returns if 'inp' is instance of 'type' 
-       var i = 0, result = false, inpInstance = src.getInstance();
+       // returns if 'src' is instance of 'target' type
+       var result = false, inpInstance = src.getInstance();
+
        if(isTypeSupported(target.name)) {
             // For primitive types instanceof will always be false 
-            if(isObject(inpInstance) && isObject(target.getInstance())) {
+            if(!isPrimitive(inpInstance) && !isPrimitive(target.getInstance())) {
                 result = target.isInstanceOf(inpInstance)
             }
        } else {
@@ -144,6 +142,18 @@ window.vjs = window.vjs || {};
 
     function isObject(value) {
         return value !== null && typeof value === 'object';
+    }
+
+    function isObjectInstance(value) {
+        return value instanceof Object;
+    }
+
+    function isPrimitive(value) {
+        var result = false;
+        if(value === null || value === undefined || !isObjectInstance(value)) {
+            result = true;
+        }
+        return result;
     }
 
     HomeModel.prototype.checkInstanceOf = checkInstanceOf;
