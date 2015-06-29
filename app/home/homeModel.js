@@ -90,7 +90,7 @@ window.vjs = window.vjs || {};
 
     var RESULT_ENUM = Object.freeze({
             true: 'rgba(0,255,0,0.1)',
-            false: 'rgba(255,0,0,0.1)',
+            false: 'rgba(255,0,0,0.2)',
             error: 'yellow'
         });
 
@@ -99,8 +99,16 @@ window.vjs = window.vjs || {};
         // this.allTypes = TYPES_PRIM + TYPES_REF;
         // this.primitiveTypes = TYPES_PRIM;
         // this.referenceTypes = TYPES_REF;
-        this.currType = '';
+        this.currTypeId = 0;
     }
+
+    Object.defineProperties(HomeModel.prototype, {
+        currType: {
+            get: function() {
+            return this.allTypes[this.currTypeId];
+            }
+        }
+    });
     
     var isTypeSupported = function (type) {
         // check if type is supported by app
@@ -125,11 +133,11 @@ window.vjs = window.vjs || {};
 
     var checkInstanceOf = function(inp, type){
        // returns if 'inp' is instance of 'type' 
-       var i = 0, result = false;
+       var i = 0, result = false, inpInstance = inp.getInstance();
        if(isTypeSupported(type)) {
             // For primitive types instanceof will always be false 
-            if(isObject(inp)) {
-                result = RESULT_ENUM[inp instanceof type];    
+            if(isObject(inpInstance)) {
+                result = RESULT_ENUM[inpInstance instanceof type];    
             } else {
                 result = RESULT_ENUM[false];
             }

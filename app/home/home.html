@@ -1,7 +1,12 @@
 <div ng-controller='HomeController as homeCtrl' ng-init="model = homeCtrl.homeModel">
         <h3>Home Page {{homeCtrl.homeModel}}</h3>
         <input type='text' ng-model='model.currType'></input>
-        <p>Instanceof</p>
+        <form name="typeSelectForm" class="form-inline">
+            <div ng-repeat="type in model.allTypes track by $index" class="form-control">
+                <input type='radio' ng-model='model.currTypeId' ng-value='{{$index}}'> {{type.name}}</input>
+            </div>
+        </form>
+        <h2 class='text-center'>{{model.currType.name}}</h2>
         <table class="table table-condensed">
             <tr>
                 <th>Instance of
@@ -14,7 +19,7 @@
                     {{type.name}} 
                 </td>
                 <td>
-                    {{model.getTypeOf(type.getInstance())}}
+                    {{model.getTypeOf(type.getInstance()    )}}
                 </td>
             <tr>
         </table>
