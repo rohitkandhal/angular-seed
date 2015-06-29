@@ -7,6 +7,7 @@
             </div>
         </form>
         <h2 class='text-center'>{{model.currType.name}}</h2>
+        <h3 class='text-center'>typeof: {{model.getTypeOf(model.currType.getInstance())}}</h3>
         <table class="table table-condensed">
             <tr>
                 <th>Instance of
@@ -15,11 +16,11 @@
                 </th>
             </tr>
             <tr ng-repeat="type in model.allTypes track by $index">
-                <td ng-style="{background:model.checkInstanceOf(model.currType, type.name)}">
+                <td ng-style="{background:model.checkInstanceOf(model.currType, type)}">
                     {{type.name}} 
                 </td>
                 <td>
-                    {{model.getTypeOf(type.getInstance()    )}}
+                    {{model.getTypeOf(type.getInstance())}}
                 </td>
             <tr>
         </table>

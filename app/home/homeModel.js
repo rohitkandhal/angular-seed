@@ -89,7 +89,7 @@ window.vjs = window.vjs || {};
         }]);
 
     var RESULT_ENUM = Object.freeze({
-            true: 'rgba(0,255,0,0.1)',
+            true: 'rgba(0,255,0,0.3)',
             false: 'rgba(255,0,0,0.2)',
             error: 'yellow'
         });
@@ -121,31 +121,21 @@ window.vjs = window.vjs || {};
         i += 1;
        }
 
-       //  i = 0;
-       // while(i < TYPES_REF.length && !isSupported) {
-       //  if(type === TYPES_REF[i].name) {
-       //      isSupported = true;
-       //  }
-       //  i += 1;
-       // }
        return isSupported;
     };
 
-    var checkInstanceOf = function(inp, type){
+    var checkInstanceOf = function(src, target){
        // returns if 'inp' is instance of 'type' 
-       var i = 0, result = false, inpInstance = inp.getInstance();
-       if(isTypeSupported(type)) {
+       var i = 0, result = false, inpInstance = src.getInstance();
+       if(isTypeSupported(target.name)) {
             // For primitive types instanceof will always be false 
-            if(isObject(inpInstance)) {
-                result = RESULT_ENUM[inpInstance instanceof type];    
-            } else {
-                result = RESULT_ENUM[false];
+            if(isObject(inpInstance) && isObject(target.getInstance())) {
+                result = target.isInstanceOf(inpInstance)
             }
-            
        } else {
-            result = RESULT_ENUM.error;
+            result = 'error';
        }
-       return result;
+       return RESULT_ENUM[result];
     }    
 
     var getTypeOf = function (inp) {
