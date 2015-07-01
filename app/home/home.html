@@ -1,5 +1,5 @@
 <div ng-controller='HomeController as homeCtrl' ng-init="model = homeCtrl.homeModel">
-        <h3>Visualize JavaScript Types {{homeCtrl.homeModel}}</h3>
+        <h3>Visualize JavaScript Types</h3>
         <form name="typeSelectForm" class="form-inline">
             <table class="table table-bordered">
                 <tr>
@@ -41,16 +41,21 @@
             <tr>
                 <th>Prototype Chain
                 </th>
-                <th>Type Of
+                <th>Properties
                 </th>
             </tr>
-            <tr ng-repeat="type in model.allTypes track by $index">
-                <td ng-style="{background:model.checkInstanceOf(model.currType, type)}">
-                    {{type.name}} 
+            <tr>
+                <td>{{model.currDescriptor.name}}</td>
+                <td></td>
+            </tr>
+            <tr ng-repeat="prop in model.currDescriptor.properties track by $index">
+                <td >
                 </td>
                 <td>
-                    {{model.getTypeOf(type.getInstance())}}
+                    {{prop}}
                 </td>
             <tr>
         </table>
+
+        <!-- {{homeCtrl.homeModel}} -->
 </div>

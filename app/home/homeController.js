@@ -16,6 +16,7 @@ window.vjs = window.vjs || {};
 
     function HomeController() {
         this.homeModel = new ns.HomeModel();
+        this.homeModel.currTypeId = 5;
     }
 
 }(window.vjs));

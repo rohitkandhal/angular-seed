@@ -37,6 +37,9 @@ window.vjs = window.vjs || {};
             },
             getInstance: function () {
                 return new Object();
+            },
+            getTypeRef: function() {
+                return Object;
             }
         }, {
             name: 'Function',
@@ -45,6 +48,9 @@ window.vjs = window.vjs || {};
             },
             getInstance: function () {
                 return new Function('a','return \'hello world\'');
+            },
+            getTypeRef: function() {
+                return Function;
             }
         }, {
             name: 'Array',
@@ -53,6 +59,9 @@ window.vjs = window.vjs || {};
             },
             getInstance: function () {
                 return new Array();
+            },
+            getTypeRef: function() {
+                return Array;
             }
         },  {
             name: 'Number',
@@ -61,6 +70,9 @@ window.vjs = window.vjs || {};
             }, 
             getInstance: function () {
                 return new Number();
+            },
+            getTypeRef: function () {
+                return Number;
             }
         },  {
             name: 'String',
@@ -69,6 +81,9 @@ window.vjs = window.vjs || {};
             },
             getInstance: function () {
                 return new String();
+            },
+            getTypeRef: function() {
+                return String;
             }
         }, {
             name: 'Boolean',
@@ -77,6 +92,9 @@ window.vjs = window.vjs || {};
             }, 
             getInstance: function (){
                 return new Boolean();
+            },
+            getTypeRef: function() {
+                return Boolean;
             }
         }, {
             name: 'RegExp',
@@ -85,6 +103,9 @@ window.vjs = window.vjs || {};
             },
             getInstance: function() {
                 return new RegExp();
+            },
+            getTypeRef: function() {
+                return RegExp;
             }
         }]);
 
@@ -96,29 +117,75 @@ window.vjs = window.vjs || {};
 
     function HomeModel() {
         this.allTypes = JS_TYPES;
-        this.currTypeId = 5;
+        this._currTypeId = 0;
+        this._currDescriptor = new Descriptor();
     }
-    /////
-    function Descriptor() {
-        this.name = '';
-        this.properties = ''
-    }
-
-    function buildDescriptor(obj) {
-        
-    }
-
-    Descriptor.prototype.buildDescriptor = buildDescriptor;
-
-    ////////
 
     Object.defineProperties(HomeModel.prototype, {
+        currTypeId: {
+            get: function() {
+                return this._currTypeId;
+            },
+
+            set: function(val) {
+                if(typeof val === 'number') {
+                    this._currTypeId = val;
+                    this.refreshCurrDescriptor();
+                }
+            }
+        },
+
         currType: {
             get: function() {
             return this.allTypes[this.currTypeId];
             }
+        },
+
+        currDescriptor: {
+            get: function() {
+                return this._currDescriptor;
+            }
         }
     });
+
+    /////
+    function Descriptor() {
+        this.name = '';
+        this.properties = '';
+    }
+
+    function buildDescriptor(obj) {
+        if(!isPrimitive(obj)) {
+            this.name = ns.utils.getFunctionName(obj);
+            this.properties = Object.getOwnPropertyNames(obj);    
+        } else {
+            this.name = '';
+            this.properties = '';
+        }
+        return this;        
+    }
+
+    function clear() {
+        this.name = '';
+        this.properties = '';
+    }
+
+    Descriptor.prototype.buildDescriptor = buildDescriptor;
+    Descriptor.prototype.clear = clear;
+
+    // var buildProtoChain = function buildProtoChainInternal(obj, result) {
+    //     // adds prototype to result obj
+    //     result = result || {};
+    //     if(isObject(obj)) {
+    //         result.name = obj.toString();
+    //         buildProtoChainInternal()
+    //     } 
+    //     return result;
+    // }
+    
+    ////////
+
+
     
     var isTypeSupported = function (type) {
         // check if type is supported by app
@@ -149,16 +216,14 @@ window.vjs = window.vjs || {};
        return RESULT_ENUM[result];
     }    
 
-
-    var buildProtoChain = function buildProtoChainInternal(obj, result) {
-        // adds prototype to result obj
-        result = result || {};
-        if(isObject(obj)) {
-            result.name = obj.toString();
-            buildProtoChainInternal()
-        } 
-        return result;
+    function refreshCurrDescriptor() {
+        if(isPrimitive(this.currType.getInstance())) {
+            this._currDescriptor.clear();
+        } else {
+            this._currDescriptor = this.currDescriptor.buildDescriptor(this.currType.getTypeRef());    
+        }  
     }
+
     function getTypeOf(inp) {
         return typeof inp;
     }
@@ -181,4 +246,5 @@ window.vjs = window.vjs || {};
 
     HomeModel.prototype.checkInstanceOf = checkInstanceOf;
     HomeModel.prototype.getTypeOf = getTypeOf;
+    HomeModel.prototype.refreshCurrDescriptor = refreshCurrDescriptor;
 }(window.vjs));
