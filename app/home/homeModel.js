@@ -96,8 +96,21 @@ window.vjs = window.vjs || {};
 
     function HomeModel() {
         this.allTypes = JS_TYPES;
-        this.currTypeId = 0;
+        this.currTypeId = 5;
     }
+    /////
+    function Descriptor() {
+        this.name = '';
+        this.properties = ''
+    }
+
+    function buildDescriptor(obj) {
+        
+    }
+
+    Descriptor.prototype.buildDescriptor = buildDescriptor;
+
+    ////////
 
     Object.defineProperties(HomeModel.prototype, {
         currType: {
@@ -136,7 +149,17 @@ window.vjs = window.vjs || {};
        return RESULT_ENUM[result];
     }    
 
-    var getTypeOf = function (inp) {
+
+    var buildProtoChain = function buildProtoChainInternal(obj, result) {
+        // adds prototype to result obj
+        result = result || {};
+        if(isObject(obj)) {
+            result.name = obj.toString();
+            buildProtoChainInternal()
+        } 
+        return result;
+    }
+    function getTypeOf(inp) {
         return typeof inp;
     }
 
