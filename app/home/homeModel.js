@@ -10,17 +10,17 @@ window.vjs = window.vjs || {};
 
     var JS_TYPES = Object.freeze(
         [{
-            name: 'number',
+            name: '007',
             getInstance: function () {
                 return 007;
             }
         }, {
-            name: 'string',
+            name: 'Hello World',
             getInstance: function () {
                 return "Hello World";
             }
         }, {
-            name: 'boolean',
+            name: 'true',
             getInstance: function () {
                 return true;
             }
