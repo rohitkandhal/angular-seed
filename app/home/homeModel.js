@@ -211,7 +211,7 @@ window.vjs = window.vjs || {};
             newDesc.properties = Object.getOwnPropertyNames(obj);
             newDesc.parent = buildDescriptor(Object.getPrototypeOf(obj));
         } else {
-            newDesc.name = 'null';
+            return null;
         }
         return newDesc;
     }
