@@ -152,32 +152,6 @@ window.vjs = window.vjs || {};
         }
     });
 
-    /////
-    function Descriptor() {
-        this.name = '';
-        this.properties = '';
-    }
-
-    function buildDescriptor(obj) {
-        if(!isPrimitive(obj)) {
-            this.name = getFunctionName(obj);
-            this.properties = Object.getOwnPropertyNames(obj);    
-        } else {
-            this.name = '';
-            this.properties = '';
-        }
-        return this;        
-    }
-
-    function clear() {
-        this.name = '';
-        this.properties = '';
-    }
-
-    Descriptor.prototype.buildDescriptor = buildDescriptor;
-    Descriptor.prototype.clear = clear;
-
-        
     var isTypeSupported = function (type) {
         // check if type is supported by app
        var isSupported = false, i = 0;
@@ -222,4 +196,32 @@ window.vjs = window.vjs || {};
     HomeModel.prototype.checkInstanceOf = checkInstanceOf;
     HomeModel.prototype.getTypeOf = getTypeOf;
     HomeModel.prototype.refreshCurrDescriptor = refreshCurrDescriptor;
+
+    // TODO: Move to different file//
+    function Descriptor() {
+        this.name = '';
+        this.properties = [];
+        this.parent = null;
+    }
+
+    function buildDescriptor(obj) {
+        var newDesc = new Descriptor();
+        if(!isPrimitive(obj)) {
+            newDesc.name = getFunctionName(obj);
+            newDesc.properties = Object.getOwnPropertyNames(obj);
+            newDesc.parent = buildDescriptor(Object.getPrototypeOf(obj));
+        } else {
+            newDesc.name = 'null';
+        }
+        return newDesc;
+    }
+
+    function clear() {
+        this.name = '';
+        this.properties = '';
+        this.parent = null;
+    }
+
+    Descriptor.prototype.buildDescriptor = buildDescriptor;
+    Descriptor.prototype.clear = clear;
 }(window.vjs));

@@ -1,5 +1,4 @@
 <div ng-controller='HomeController as homeCtrl' ng-init="model = homeCtrl.homeModel">
-        <h3>Visualize JavaScript Types</h3>
         <form name="typeSelectForm" class="form-inline">
             <table class="table table-bordered">
                 <tr>
@@ -36,7 +35,7 @@
             </table>            
         </form>
         <h2 class='text-center'>{{model.currType.name}}</h2>
-        
+<!--         
         <table class="table table-condensed">
             <tr>
                 <th>Prototype Chain
@@ -55,7 +54,8 @@
                     {{prop}}
                 </td>
             <tr>
-        </table>
+        </table> -->
 
         <!-- {{homeCtrl.homeModel}} -->
+        <h3>{{model.currDescriptor}}</h3>
 </div>
