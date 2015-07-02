@@ -5,6 +5,9 @@ window.vjs = window.vjs || {};
 
 	function Utils() {}
 	Utils.getFunctionName = getFunctionName;
+	Utils.isObject = isObject;
+	Utils.isObjectInstance = isObjectInstance;
+	Utils.isPrimitive = isPrimitive;
 
 	function getFunctionName(functionRef) {
 		// functionRef	- reference of function whose name need to retrieved
@@ -23,4 +26,21 @@ window.vjs = window.vjs || {};
 		}
 		return 'null';
 	}
+
+	function isObject(value) {
+        return value !== null && typeof value === 'object';
+    }
+
+    function isObjectInstance(value) {
+        return value instanceof Object;
+    }
+
+    function isPrimitive(value) {
+        var result = false;
+        if(value === null || value === undefined || !isObjectInstance(value)) {
+            result = true;
+        }
+        return result;
+    }
+
 }(window.vjs))

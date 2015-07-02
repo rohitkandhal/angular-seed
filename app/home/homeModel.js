@@ -3,6 +3,10 @@ window.vjs = window.vjs || {};
 (function(ns) {
 
     ns.HomeModel = HomeModel;
+    var getFunctionName = ns.utils.getFunctionName,
+        isObject = ns.utils.isObject,
+        isObjectInstance = ns.utils.isObjectInstance,
+        isPrimitive = ns.utils.isPrimitive;
 
     var JS_TYPES = Object.freeze(
         [{
@@ -156,7 +160,7 @@ window.vjs = window.vjs || {};
 
     function buildDescriptor(obj) {
         if(!isPrimitive(obj)) {
-            this.name = ns.utils.getFunctionName(obj);
+            this.name = getFunctionName(obj);
             this.properties = Object.getOwnPropertyNames(obj);    
         } else {
             this.name = '';
@@ -173,20 +177,7 @@ window.vjs = window.vjs || {};
     Descriptor.prototype.buildDescriptor = buildDescriptor;
     Descriptor.prototype.clear = clear;
 
-    // var buildProtoChain = function buildProtoChainInternal(obj, result) {
-    //     // adds prototype to result obj
-    //     result = result || {};
-    //     if(isObject(obj)) {
-    //         result.name = obj.toString();
-    //         buildProtoChainInternal()
-    //     } 
-    //     return result;
-    // }
-    
-    ////////
-
-
-    
+        
     var isTypeSupported = function (type) {
         // check if type is supported by app
        var isSupported = false, i = 0;
@@ -226,22 +217,6 @@ window.vjs = window.vjs || {};
 
     function getTypeOf(inp) {
         return typeof inp;
-    }
-
-    function isObject(value) {
-        return value !== null && typeof value === 'object';
-    }
-
-    function isObjectInstance(value) {
-        return value instanceof Object;
-    }
-
-    function isPrimitive(value) {
-        var result = false;
-        if(value === null || value === undefined || !isObjectInstance(value)) {
-            result = true;
-        }
-        return result;
     }
 
     HomeModel.prototype.checkInstanceOf = checkInstanceOf;
