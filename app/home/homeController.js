@@ -17,8 +17,7 @@ window.vjs = window.vjs || {};
         if(!this.homeModel){
             this.homeModel = new ns.HomeModel();
             this.homeModel.currTypeId = 5;      
-        }
-        
+        }        
     }
 
 }(window.vjs));

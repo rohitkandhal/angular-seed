@@ -126,27 +126,6 @@ window.vjs = window.vjs || {};
         buildProtoGraph();
     }
 
-var data1 = {
-    "name": "Object",
-        "parent": "null",
-        "children": [{
-        "name": "null",
-            "parent": "Object",
-            "properties": [
-            "bob",
-            "frank"]
-    }],
-        "properties": [
-        "length",
-        "name",
-        "arguments",
-        "caller",
-        "prototype",
-        "keys",
-        "create",
-        "defineProperty",
-        "unobserve"]
-};
     Object.defineProperties(HomeModel.prototype, {
         currTypeId: {
             get: function() {
@@ -156,8 +135,7 @@ var data1 = {
             set: function(val) {
                 if(typeof val === 'number') {
                     this._currTypeId = val;
-                    this.refreshCurrDescriptor();
-                    console.log(this.currDescriptor);
+                    this.refreshCurrDescriptor();                    
                     updateProtoTree(this.currDescriptor);
                 }
             }
@@ -165,7 +143,7 @@ var data1 = {
 
         currType: {
             get: function() {
-            return this.allTypes[this.currTypeId];
+                return this.allTypes[this.currTypeId];
             }
         },
 
@@ -202,15 +180,22 @@ var data1 = {
        } else {
             result = 'error';
        }
-       return RESULT_ENUM[result];
+       return result;
     }    
+
+    function getColor(inp) {
+        var result = "grey";    // default color
+        if(RESULT_ENUM[inp]){
+            result = RESULT_ENUM[inp]
+        }
+        return result;
+    }
 
     function refreshCurrDescriptor() {
         if(isPrimitive(this.currType.getInstance())) {
             this._currDescriptor.clear();
         } else {
             this._currDescriptor = buildDescriptor(this.currType.getTypeRef());
-            console.log(this.currDescriptor);
         }  
     }
 
@@ -265,11 +250,9 @@ var data1 = {
         // Declare the nodes
         var node = svg.selectAll("g.node")
                     .data(nodes, function (d) {
-                        console.log("NODE ENTER", d);
                     return d.id || (d.id = ++i);
                 });
 
-        console.log(nodes);
         // Enter the nodes.
         var nodeEnter = node.enter().append("g")
             .attr("class", "node")
@@ -287,27 +270,25 @@ var data1 = {
             .attr("dy", ".35em")
             .attr("class", "node-header")
             .text(function (d) {
-                console.log(d);
                 return d.name;
             })
             .style("fill-opacity", 1);
 
         var nodeProperties = nodeEnter.append("text")
             .attr("class", "properties")
-            .attr("text-anchor", "middle")
+            .attr("text-anchor", "start")
             .attr("y", 52)
             .style("fill-opacity", 1);
 
         nodeProperties.selectAll("tspan")
             .data(function (d) {
-                console.log("TSPAN data", d);
                 return d.properties || [];
             })
             .enter()
             .append('tspan')
             .attr("x", 0)
             .attr('dy', function (d, i) {
-                return (0.9) + "em";
+                return (1.4) + "em";
             })
             .text(function (d) {
                 return d;
@@ -329,6 +310,7 @@ var data1 = {
     HomeModel.prototype.checkInstanceOf = checkInstanceOf;
     HomeModel.prototype.getTypeOf = getTypeOf;
     HomeModel.prototype.refreshCurrDescriptor = refreshCurrDescriptor;
+    HomeModel.prototype.getColor = getColor;
 
     // TODO: Move to different file//
     function Descriptor() {

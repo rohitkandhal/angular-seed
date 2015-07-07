@@ -20,7 +20,7 @@ window.vjs = window.vjs || {};
 		// - capture one or more valid javascript identifier characters
 		// - optionally followed by whitespace
 		// - followed by an opening brace
-		var matchResult = /^function\s+([\w\$]+)\s*\(/.exec(functionRef.toString());
+		var matchResult = /^function\s+([\w\$]*)\s*\(/.exec(functionRef.toString());
 		if(matchResult && matchResult.length > 0) {
 			return matchResult[0] + ")";
 		}

@@ -18,7 +18,7 @@
                         instanceOf
                     </td>
                     <td ng-repeat="type in model.allTypes track by $index" 
-                        ng-style="{background:model.checkInstanceOf(model.currType, type)}"
+                        ng-style="{background:model.getColor(model.checkInstanceOf(model.currType, type))}"
                         class='text-center'>
                         {{type.name}} 
                     </td>
