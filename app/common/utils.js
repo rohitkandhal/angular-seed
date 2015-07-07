@@ -22,7 +22,7 @@ window.vjs = window.vjs || {};
 		// - followed by an opening brace
 		var matchResult = /^function\s+([\w\$]+)\s*\(/.exec(functionRef.toString());
 		if(matchResult && matchResult.length > 0) {
-			return matchResult[1];
+			return matchResult[0] + ")";
 		}
 		return 'null';
 	}

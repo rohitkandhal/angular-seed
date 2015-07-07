@@ -123,7 +123,7 @@ window.vjs = window.vjs || {};
         this.allTypes = JS_TYPES;
         this._currTypeId = 0;
         this._currDescriptor = new Descriptor();
-        buildProtoGraph(this.currDescriptor);
+        buildProtoGraph();
     }
 
 var data1 = {
@@ -157,8 +157,7 @@ var data1 = {
                 if(typeof val === 'number') {
                     this._currTypeId = val;
                     this.refreshCurrDescriptor();
-
-
+                    console.log(this.currDescriptor);
                     updateProtoTree(this.currDescriptor);
                 }
             }
@@ -221,16 +220,15 @@ var data1 = {
 
     var tree, diagonal, svg;
 
-    function buildProtoGraph(data) {
-        if(data) {
+    function buildProtoGraph() {
             var margin = {
                 top: 0,
                 right: 20,
                 bottom: 0,
-                left: 200
+                left: 300
             },
-                width = 800 - margin.right - margin.left,
-                height = 400 - margin.top - margin.bottom;
+                width = 900 - margin.right - margin.left,
+                height = 600 - margin.top - margin.bottom;
 
             tree = d3.layout.tree()
                 .size([height, width]);
@@ -244,32 +242,34 @@ var data1 = {
                 .attr("width", width + margin.right + margin.left)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            updateProtoTree(data);
-        }
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");        
     }
 
-    function updateProtoTree(source) {
+    function updateProtoTree(data) {
+
+        // clear any existing tree if there is any for new data
+        svg.selectAll("*").remove();
+
+        var source = JSON.parse(JSON.stringify(data));  // deep copy
         var i = 0;
 
         // Compute the new tree layout.
         var nodes = tree.nodes(source),
             links = tree.links(nodes);
 
-        //console.log(nodes);
-
         // Normalize for fixed-depth.
         nodes.forEach(function (d) {
-            d.y = d.depth * 180;
+            d.y = d.depth * 250;
         });
 
         // Declare the nodes
         var node = svg.selectAll("g.node")
-            .data(nodes, function (d) {
-            return d.id || (d.id = ++i);
-        });
+                    .data(nodes, function (d) {
+                        console.log("NODE ENTER", d);
+                    return d.id || (d.id = ++i);
+                });
 
+        console.log(nodes);
         // Enter the nodes.
         var nodeEnter = node.enter().append("g")
             .attr("class", "node")
@@ -281,23 +281,26 @@ var data1 = {
             .attr("r", 10)
             .style("fill", "#fff");
 
-        var nodeText = nodeEnter.append("text")
+        var nodeHeader = nodeEnter.append("text")
             .attr("text-anchor", "middle")
             .attr("y", 26)
             .attr("dy", ".35em")
+            .attr("class", "node-header")
             .text(function (d) {
-            return d.name;
-        })
+                console.log(d);
+                return d.name;
+            })
             .style("fill-opacity", 1);
 
-        var someText = nodeEnter.append("text")
+        var nodeProperties = nodeEnter.append("text")
             .attr("class", "properties")
             .attr("text-anchor", "middle")
             .attr("y", 52)
             .style("fill-opacity", 1);
 
-        someText.selectAll('tspan')
+        nodeProperties.selectAll("tspan")
             .data(function (d) {
+                console.log("TSPAN data", d);
                 return d.properties || [];
             })
             .enter()
@@ -307,7 +310,6 @@ var data1 = {
                 return (0.9) + "em";
             })
             .text(function (d) {
-                //console.log(d);
                 return d;
             });
 
@@ -342,7 +344,7 @@ var data1 = {
         
         if(!isPrimitive(obj)) {
             newDesc.name = getFunctionName(obj);
-            newDesc.properties.push(Object.getOwnPropertyNames(obj));
+            newDesc.properties = Object.getOwnPropertyNames(obj);
             newDesc.children.push(buildDescriptor(Object.getPrototypeOf(obj), newDesc.name));
         } else {
             newDesc.name = "null";
