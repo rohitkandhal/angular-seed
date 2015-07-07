@@ -30,3 +30,19 @@ body {
   content: "";
   padding: 0;
 }
+
+.node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 3px;
+}
+.node text {
+    font: 24px sans-serif;
+}
+.node .properties {
+    font: 14px sans-serif;
+}
+.link {
+    fill: none;
+    stroke-width: 2px;
+}
