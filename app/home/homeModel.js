@@ -123,18 +123,9 @@ window.vjs = window.vjs || {};
         this.allTypes = JS_TYPES;
         this._currTypeId = 0;
         this._currDescriptor = new Descriptor();
+        buildProtoGraph(data1);
     }
 
-    Object.defineProperties(HomeModel.prototype, {
-        currTypeId: {
-            get: function() {
-                return this._currTypeId;
-            },
-
-            set: function(val) {
-                if(typeof val === 'number') {
-                    this._currTypeId = val;
-                    this.refreshCurrDescriptor();
 var data1 = {
     "name": "Object",
         "parent": "null",
@@ -156,8 +147,19 @@ var data1 = {
         "defineProperty",
         "unobserve"]
 };
+    Object.defineProperties(HomeModel.prototype, {
+        currTypeId: {
+            get: function() {
+                return this._currTypeId;
+            },
 
-                    buildProtoGraph(data1);
+            set: function(val) {
+                if(typeof val === 'number') {
+                    this._currTypeId = val;
+                    this.refreshCurrDescriptor();
+
+
+                    updateProtoTree(data1);
                 }
             }
         },
@@ -216,6 +218,8 @@ var data1 = {
         return typeof inp;
     }
 
+    var tree, diagonal, svg;
+
     function buildProtoGraph(data) {
         if(data) {
             var margin = {
@@ -227,99 +231,99 @@ var data1 = {
                 width = 960 - margin.right - margin.left,
                 height = 500 - margin.top - margin.bottom;
 
-            var i = 0;
+            
 
-            var tree = d3.layout.tree()
+            tree = d3.layout.tree()
                 .size([height, width]);
 
-            var diagonal = d3.svg.diagonal()
+            diagonal = d3.svg.diagonal()
                 .projection(function (d) {
                 return [d.y, d.x];
             });
 
-            var svg = d3.select(".treeContainer").append("svg")
+            svg = d3.select(".treeContainer").append("svg")
                 .attr("width", width + margin.right + margin.left)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            var root = data;
-
-            update(root);
-
-            function update(source) {
-                // Compute the new tree layout.
-                var nodes = tree.nodes(source),
-                    links = tree.links(nodes);
-
-                console.log(nodes);
-
-                // Normalize for fixed-depth.
-                nodes.forEach(function (d) {
-                    d.y = d.depth * 180;
-                });
-
-                // Declare the nodes
-                var node = svg.selectAll("g.node")
-                    .data(nodes, function (d) {
-                    return d.id || (d.id = ++i);
-                });
-
-                // Enter the nodes.
-                var nodeEnter = node.enter().append("g")
-                    .attr("class", "node")
-                    .attr("transform", function (d) {
-                    return "translate(" + d.y + "," + d.x + ")";
-                });
-
-                nodeEnter.append("circle")
-                    .attr("r", 10)
-                    .style("fill", "#fff");
-
-                var nodeText = nodeEnter.append("text")
-                    .attr("text-anchor", "middle")
-                    .attr("y", 26)
-                    .attr("dy", ".35em")
-                    .text(function (d) {
-                    return d.name;
-                })
-                    .style("fill-opacity", 1);
-
-                var someText = nodeEnter.append("text")
-                    .attr("class", "properties")
-                    .attr("text-anchor", "middle")
-                    .attr("y", 52)
-                    .style("fill-opacity", 1);
-
-                someText.selectAll('tspan')
-                    .data(function (d) {
-                        return d.properties || [];
-                    })
-                    .enter()
-                    .append('tspan')
-                    .attr("x", 0)
-                    .attr('dy', function (d, i) {
-                        return (0.9) + "em";
-                    })
-                    .text(function (d) {
-                        console.log(d);
-                        return d;
-                    });
-
-                // Declare the links¦
-                var link = svg.selectAll("path.link")
-                    .data(links, function (d) {
-                    return d.target.id;
-                });
-
-                // Enter the links.
-                link.enter().insert("path", "g")
-                    .attr("stroke", "red")
-                    .attr("class", "link")
-                    .attr("d", diagonal);
-
-            }
+            updateProtoTree(data);
         }
+    }
+
+    function updateProtoTree(source) {
+        var i = 0;
+
+        // Compute the new tree layout.
+        var nodes = tree.nodes(source),
+            links = tree.links(nodes);
+
+        console.log(nodes);
+
+        // Normalize for fixed-depth.
+        nodes.forEach(function (d) {
+            d.y = d.depth * 180;
+        });
+
+        // Declare the nodes
+        var node = svg.selectAll("g.node")
+            .data(nodes, function (d) {
+            return d.id || (d.id = ++i);
+        });
+
+        // Enter the nodes.
+        var nodeEnter = node.enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function (d) {
+            return "translate(" + d.y + "," + d.x + ")";
+        });
+
+        nodeEnter.append("circle")
+            .attr("r", 10)
+            .style("fill", "#fff");
+
+        var nodeText = nodeEnter.append("text")
+            .attr("text-anchor", "middle")
+            .attr("y", 26)
+            .attr("dy", ".35em")
+            .text(function (d) {
+            return d.name;
+        })
+            .style("fill-opacity", 1);
+
+        var someText = nodeEnter.append("text")
+            .attr("class", "properties")
+            .attr("text-anchor", "middle")
+            .attr("y", 52)
+            .style("fill-opacity", 1);
+
+        someText.selectAll('tspan')
+            .data(function (d) {
+                return d.properties || [];
+            })
+            .enter()
+            .append('tspan')
+            .attr("x", 0)
+            .attr('dy', function (d, i) {
+                return (0.9) + "em";
+            })
+            .text(function (d) {
+                console.log(d);
+                return d;
+            });
+
+        // Declare the links¦
+        var link = svg.selectAll("path.link")
+            .data(links, function (d) {
+            return d.target.id;
+        });
+
+        // Enter the links.
+        link.enter().insert("path", "g")
+            .attr("stroke", "red")
+            .attr("class", "link")
+            .attr("d", diagonal);
+
     }
     HomeModel.prototype.checkInstanceOf = checkInstanceOf;
     HomeModel.prototype.getTypeOf = getTypeOf;

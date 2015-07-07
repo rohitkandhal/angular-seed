@@ -7,16 +7,18 @@ window.vjs = window.vjs || {};
 
         .config(['$routeProvider', function($routeProvider) {
           $routeProvider.when('/home', {
-            templateUrl: 'home/home.html',
-            controller: 'HomeController'
+            templateUrl: 'home/home.html'
           });
         }])
 
         .controller('HomeController', HomeController);
 
     function HomeController() {
-        this.homeModel = new ns.HomeModel();
-        this.homeModel.currTypeId = 5;
+        if(!this.homeModel){
+            this.homeModel = new ns.HomeModel();
+            this.homeModel.currTypeId = 5;      
+        }
+        
     }
 
 }(window.vjs));
