@@ -14,13 +14,13 @@ window.vjs = window.vjs || {};
 		// Don't call, instead send reference e.g. pass  Object.toString instead of Object.toString()
 		
 		// Match:
-		// - the beginning of the string
+		// - the beginning of the string (IE have new line in front of function name)
 		// - the word 'function'
 		// - at least some whitespace
-		// - capture one or more valid javascript identifier characters
+		// - capture one or more valid javascript identifier characters (UPDATE: IE doesn't have any space so ? instead of +)
 		// - optionally followed by whitespace
 		// - followed by an opening brace
-		var matchResult = /^function\s+([\w\$]*)\s*\(/.exec(functionRef.toString());
+		var matchResult = /^\n?function\s?([\w\$]*)\s*\(/.exec(functionRef.toString());
 		if(matchResult && matchResult.length > 0) {
 			return matchResult[0] + ")";
 		}
