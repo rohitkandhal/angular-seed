@@ -210,7 +210,7 @@ var data1 = {
         if(isPrimitive(this.currType.getInstance())) {
             this._currDescriptor.clear();
         } else {
-            this._currDescriptor = this.currDescriptor.buildDescriptor(this.currType.getTypeRef());    
+            this._currDescriptor = buildDescriptor(this.currType.getTypeRef());
         }  
     }
 
@@ -326,23 +326,48 @@ var data1 = {
     HomeModel.prototype.checkInstanceOf = checkInstanceOf;
     HomeModel.prototype.getTypeOf = getTypeOf;
     HomeModel.prototype.refreshCurrDescriptor = refreshCurrDescriptor;
-
+var data1 = {
+    "name": "Object",
+        "parent": "null",
+        "children": [{
+        "name": "null",
+            "parent": "Object",
+            "properties": [
+            "bob",
+            "frank"]
+    }],
+        "properties": [
+        "length",
+        "name",
+        "arguments",
+        "caller",
+        "prototype",
+        "keys",
+        "create",
+        "defineProperty",
+        "unobserve"]
+};
     // TODO: Move to different file//
     function Descriptor() {
-        this.name = '';
+        this.name = "";
         this.properties = [];
         this.parent = null;
+        this.children = [];
     }
 
-    function buildDescriptor(obj) {
+    function buildDescriptor(obj, parentName) {
         var newDesc = new Descriptor();
+        newDesc.parent = parentName || null;
+        
         if(!isPrimitive(obj)) {
             newDesc.name = getFunctionName(obj);
             newDesc.properties = Object.getOwnPropertyNames(obj);
-            newDesc.parent = buildDescriptor(Object.getPrototypeOf(obj));
+            newDesc.children = buildDescriptor(Object.getPrototypeOf(obj), newDesc.name);
         } else {
-            return null;
+            newDesc.name = "null";
+            newDesc.properties = [];
         }
+
         return newDesc;
     }
 
@@ -352,6 +377,5 @@ var data1 = {
         this.parent = null;
     }
 
-    Descriptor.prototype.buildDescriptor = buildDescriptor;
     Descriptor.prototype.clear = clear;
 }(window.vjs));
