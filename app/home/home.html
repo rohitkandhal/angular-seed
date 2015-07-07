@@ -5,12 +5,13 @@
                     <th>
                     </th>
                     <th ng-repeat="type in model.allTypes track by $index" >
-                        <input type='radio'
+                        <input id="typeRadio{{$index}}" 
+                                type='radio'
                                ng-model='model.currTypeId'
                                ng-value='{{$index}}'
                                class='text-center'> 
-                        {{type.name}}
                         </input>
+                        <label for="typeRadio{{$index}}">{{type.name}}</label>
                     </th>
                 </tr>
                 <tr>
@@ -20,7 +21,8 @@
                     <td ng-repeat="type in model.allTypes track by $index" 
                         ng-style="{background:model.getColor(model.checkInstanceOf(model.currType, type))}"
                         class='text-center'>
-                        {{type.name}} 
+                        <span ng-if="!model.isPrimitive(type.getInstance())">{{type.name}} </span>
+                        <span ng-if="model.isPrimitive(type.getInstance())" style="background:yellow"><i>primitive</i></span>
                     </td>
                 <tr>
                 <tr>
@@ -35,7 +37,6 @@
             </table>            
         </form>
         <h2 class='text-center'>{{model.currType.name}}</h2>
-
         <!-- placeholder for prototype graph tree -->        
         <div class="treeContainer">
         

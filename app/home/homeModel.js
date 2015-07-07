@@ -3,6 +3,8 @@ window.vjs = window.vjs || {};
 (function(ns) {
 
     ns.HomeModel = HomeModel;
+    var Descriptor = ns.Descriptor;
+
     var getFunctionName = ns.utils.getFunctionName,
         isObject = ns.utils.isObject,
         isObjectInstance = ns.utils.isObjectInstance,
@@ -193,9 +195,10 @@ window.vjs = window.vjs || {};
 
     function refreshCurrDescriptor() {
         if(isPrimitive(this.currType.getInstance())) {
-            this._currDescriptor.clear();
+            this._currDescriptor = Descriptor.buildDescriptorForPrimitive();
+
         } else {
-            this._currDescriptor = buildDescriptor(this.currType.getTypeRef());
+            this._currDescriptor = Descriptor.buildDescriptor(this.currType.getTypeRef());
         }  
     }
 
@@ -206,14 +209,16 @@ window.vjs = window.vjs || {};
     var tree, diagonal, svg;
 
     function buildProtoGraph() {
+        // Assumes that there is a <div class="treeContainer"> present in body
             var margin = {
-                top: 0,
+                top: 50,
                 right: 20,
                 bottom: 0,
                 left: 300
             },
-                width = 900 - margin.right - margin.left,
-                height = 600 - margin.top - margin.bottom;
+            parentWidth = d3.select(".treeContainer").node().getBoundingClientRect().width,
+            width = parentWidth - margin.right - margin.left,
+            height = 700 - margin.top - margin.bottom;
 
             tree = d3.layout.tree()
                 .size([height, width]);
@@ -227,7 +232,10 @@ window.vjs = window.vjs || {};
                 .attr("width", width + margin.right + margin.left)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");        
+                .attr("transform", "translate(" + margin.left + "," + (-((height/2) - margin.top)) + ")");        
+                // negative y transform is added to move tree all the way up. 
+                // By default tree split height and starts from center. However, in our case we
+                // are drawing horizontal line and don't need to use upper half portion of tree
     }
 
     function updateProtoTree(data) {
@@ -235,10 +243,10 @@ window.vjs = window.vjs || {};
         // clear any existing tree if there is any for new data
         svg.selectAll("*").remove();
 
-        var source = JSON.parse(JSON.stringify(data));  // deep copy
+        //var source = JSON.parse(JSON.stringify(data));  // deep copy as d3 mutates data
+        var source = Object.create(data);
         var i = 0;
 
-        // Compute the new tree layout.
         var nodes = tree.nodes(source),
             links = tree.links(nodes);
 
@@ -286,9 +294,9 @@ window.vjs = window.vjs || {};
             })
             .enter()
             .append('tspan')
-            .attr("x", 0)
+            .attr("x", -40)
             .attr('dy', function (d, i) {
-                return (1.4) + "em";
+                return (1.5) + "em";
             })
             .text(function (d) {
                 return d;
@@ -311,34 +319,6 @@ window.vjs = window.vjs || {};
     HomeModel.prototype.getTypeOf = getTypeOf;
     HomeModel.prototype.refreshCurrDescriptor = refreshCurrDescriptor;
     HomeModel.prototype.getColor = getColor;
-
-    // TODO: Move to different file//
-    function Descriptor() {
-        this.name = "";
-        this.properties = [];
-        this.parent = null;
-        this.children = [];
-    }
-
-    function buildDescriptor(obj, parentName) {
-        var newDesc = new Descriptor();
-        //newDesc.parent = parentName || null;
-        
-        if(!isPrimitive(obj)) {
-            newDesc.name = getFunctionName(obj);
-            newDesc.properties = Object.getOwnPropertyNames(obj);
-            newDesc.children.push(buildDescriptor(Object.getPrototypeOf(obj), newDesc.name));
-        } else {
-            newDesc.name = "null";
-            newDesc.properties = [];
-        }
-
-        return newDesc;
-    }
-
-    function clear() {
-        this._currDescriptor = new Descriptor();
-    }
-
-    Descriptor.prototype.clear = clear;
+    HomeModel.prototype.isPrimitive = isPrimitive;
+   
 }(window.vjs));
