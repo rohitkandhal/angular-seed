@@ -223,15 +223,13 @@ var data1 = {
     function buildProtoGraph(data) {
         if(data) {
             var margin = {
-                top: 20,
+                top: 0,
                 right: 20,
-                bottom: 20,
-                left: 100
+                bottom: 0,
+                left: 200
             },
-                width = 960 - margin.right - margin.left,
-                height = 500 - margin.top - margin.bottom;
-
-            
+                width = 800 - margin.right - margin.left,
+                height = 400 - margin.top - margin.bottom;
 
             tree = d3.layout.tree()
                 .size([height, width]);
@@ -258,7 +256,7 @@ var data1 = {
         var nodes = tree.nodes(source),
             links = tree.links(nodes);
 
-        console.log(nodes);
+        //console.log(nodes);
 
         // Normalize for fixed-depth.
         nodes.forEach(function (d) {
@@ -308,7 +306,7 @@ var data1 = {
                 return (0.9) + "em";
             })
             .text(function (d) {
-                console.log(d);
+                //console.log(d);
                 return d;
             });
 
