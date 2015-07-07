@@ -123,7 +123,7 @@ window.vjs = window.vjs || {};
         this.allTypes = JS_TYPES;
         this._currTypeId = 0;
         this._currDescriptor = new Descriptor();
-        buildProtoGraph(data1);
+        buildProtoGraph(this.currDescriptor);
     }
 
 var data1 = {
@@ -159,7 +159,7 @@ var data1 = {
                     this.refreshCurrDescriptor();
 
 
-                    updateProtoTree(data1);
+                    updateProtoTree(this.currDescriptor);
                 }
             }
         },
@@ -211,6 +211,7 @@ var data1 = {
             this._currDescriptor.clear();
         } else {
             this._currDescriptor = buildDescriptor(this.currType.getTypeRef());
+            console.log(this.currDescriptor);
         }  
     }
 
@@ -326,27 +327,7 @@ var data1 = {
     HomeModel.prototype.checkInstanceOf = checkInstanceOf;
     HomeModel.prototype.getTypeOf = getTypeOf;
     HomeModel.prototype.refreshCurrDescriptor = refreshCurrDescriptor;
-var data1 = {
-    "name": "Object",
-        "parent": "null",
-        "children": [{
-        "name": "null",
-            "parent": "Object",
-            "properties": [
-            "bob",
-            "frank"]
-    }],
-        "properties": [
-        "length",
-        "name",
-        "arguments",
-        "caller",
-        "prototype",
-        "keys",
-        "create",
-        "defineProperty",
-        "unobserve"]
-};
+
     // TODO: Move to different file//
     function Descriptor() {
         this.name = "";
@@ -357,12 +338,12 @@ var data1 = {
 
     function buildDescriptor(obj, parentName) {
         var newDesc = new Descriptor();
-        newDesc.parent = parentName || null;
+        //newDesc.parent = parentName || null;
         
         if(!isPrimitive(obj)) {
             newDesc.name = getFunctionName(obj);
-            newDesc.properties = Object.getOwnPropertyNames(obj);
-            newDesc.children = buildDescriptor(Object.getPrototypeOf(obj), newDesc.name);
+            newDesc.properties.push(Object.getOwnPropertyNames(obj));
+            newDesc.children.push(buildDescriptor(Object.getPrototypeOf(obj), newDesc.name));
         } else {
             newDesc.name = "null";
             newDesc.properties = [];
@@ -372,9 +353,7 @@ var data1 = {
     }
 
     function clear() {
-        this.name = '';
-        this.properties = '';
-        this.parent = null;
+        this._currDescriptor = new Descriptor();
     }
 
     Descriptor.prototype.clear = clear;
