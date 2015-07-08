@@ -210,13 +210,15 @@ window.vjs = window.vjs || {};
 
     function buildProtoGraph() {
         // Assumes that there is a <div class="treeContainer"> present in body
+            var parentWidth = d3.select(".treeContainer").node().getBoundingClientRect().width;
+            parentWidth = parentWidth < 900 ? 900 : parentWidth;
+
             var margin = {
                 top: 50,
                 right: 20,
                 bottom: 0,
                 left: 300
             },
-            parentWidth = d3.select(".treeContainer").node().getBoundingClientRect().width,
             width = parentWidth - margin.right - margin.left,
             height = 700 - margin.top - margin.bottom;
 
