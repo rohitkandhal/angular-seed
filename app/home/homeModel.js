@@ -71,10 +71,10 @@ window.vjs = window.vjs || {};
                 return value instanceof Function;
             },
             getInstance: function () {
-                return new Function('a','return \'hello world\'');
+                return function abc() { return "hello world"; };
             },
             getExample: function() {
-                return "var foo = function abc() { };";
+                return "var foo = function abc() { return \"hello world\"; };";
             },
             getTypeRef: function() {
                 return Function;
@@ -99,7 +99,7 @@ window.vjs = window.vjs || {};
                 return value instanceof Number;
             }, 
             getInstance: function () {
-                return new Number();
+                return new Number(30);
             },
             getExample: function() {
                 return "var foo = new Number(30);";
@@ -113,7 +113,7 @@ window.vjs = window.vjs || {};
                 return value instanceof String;
             },
             getInstance: function () {
-                return new String();
+                return new String("Hello World");
             },
             getExample: function() {
                 return "var foo = new String(\"Hello World\");";
@@ -127,7 +127,7 @@ window.vjs = window.vjs || {};
                 return value instanceof Boolean;
             }, 
             getInstance: function (){
-                return new Boolean();
+                return new Boolean(true);
             },
             getExample: function() {
                 return "var foo = new Boolean(true);";
@@ -141,7 +141,7 @@ window.vjs = window.vjs || {};
                 return value instanceof RegExp;
             },
             getInstance: function() {
-                return new RegExp();
+                return new RegExp(/[foo]+/);
             },
             getExample: function() {
                 return "var foo = new RegExp(/[foo]+/);";

@@ -23,7 +23,10 @@ window.vjs = window.vjs || {};
 		var matchResult = /^\n?function\s?([\w\$]*)\s*\(/.exec(functionRef.toString());
 		if(matchResult && matchResult.length > 0) {
 			return matchResult[0] + ")";
-		}
+		} else if(functionRef.constructor){
+            return getFunctionName(functionRef.constructor)
+        }
+
 		return 'null';
 	}
 
