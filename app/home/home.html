@@ -3,6 +3,7 @@
             <table class="table table-bordered">
                 <tr>
                     <th>
+                        Select -->
                     </th>
                     <th ng-repeat="type in model.allTypes track by $index" >
                         <input id="typeRadio{{$index}}" 
@@ -36,7 +37,7 @@
                 <tr>
             </table>            
         </form>
-        <h2 class='text-center'>{{model.currType.name}}</h2>
+        <h2 class='text-center'>{{model.currType.getExample()}}</h2>
         <!-- placeholder for prototype graph tree -->        
         <div class="treeContainer">
         

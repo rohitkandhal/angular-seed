@@ -15,26 +15,41 @@ window.vjs = window.vjs || {};
             name: '007',
             getInstance: function () {
                 return 007;
+            },
+            getExample: function() {
+                return "var foo = 007;";
             }
         }, {
             name: 'Hello World',
             getInstance: function () {
                 return "Hello World";
+            },
+            getExample: function() {
+                return "var foo = \"Hello World\";";
             }
         }, {
             name: 'true',
             getInstance: function () {
                 return true;
+            },
+            getExample: function() {
+                return "var foo = true;";
             }
         }, {
             name: 'null',
             getInstance: function () {
                 return null;
+            },
+            getExample: function() {
+                return "var foo = null;";
             }
         }, {
             name: 'undefined',
             getInstance: function () {
                 return undefined;
+            },
+            getExample: function() {
+                return "var foo = undefined;";
             }
         }, {
             name: 'Object',
@@ -43,6 +58,9 @@ window.vjs = window.vjs || {};
             },
             getInstance: function () {
                 return new Object();
+            },
+            getExample: function() {
+                return "var foo = { };";
             },
             getTypeRef: function() {
                 return Object;
@@ -55,6 +73,9 @@ window.vjs = window.vjs || {};
             getInstance: function () {
                 return new Function('a','return \'hello world\'');
             },
+            getExample: function() {
+                return "var foo = function abc() { };";
+            },
             getTypeRef: function() {
                 return Function;
             }
@@ -65,6 +86,9 @@ window.vjs = window.vjs || {};
             },
             getInstance: function () {
                 return new Array();
+            },
+            getExample: function() {
+                return "var foo = [1, 2, 3];";
             },
             getTypeRef: function() {
                 return Array;
@@ -77,6 +101,9 @@ window.vjs = window.vjs || {};
             getInstance: function () {
                 return new Number();
             },
+            getExample: function() {
+                return "var foo = new Number(30);";
+            },
             getTypeRef: function () {
                 return Number;
             }
@@ -87,6 +114,9 @@ window.vjs = window.vjs || {};
             },
             getInstance: function () {
                 return new String();
+            },
+            getExample: function() {
+                return "var foo = new String(\"Hello World\");";
             },
             getTypeRef: function() {
                 return String;
@@ -99,6 +129,9 @@ window.vjs = window.vjs || {};
             getInstance: function (){
                 return new Boolean();
             },
+            getExample: function() {
+                return "var foo = new Boolean(true);";
+            },
             getTypeRef: function() {
                 return Boolean;
             }
@@ -109,6 +142,9 @@ window.vjs = window.vjs || {};
             },
             getInstance: function() {
                 return new RegExp();
+            },
+            getExample: function() {
+                return "var foo = new RegExp(/[foo]+/);";
             },
             getTypeRef: function() {
                 return RegExp;

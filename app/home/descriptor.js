@@ -35,7 +35,7 @@
     function buildDescriptorForPrimitive() {
         var newDesc = new Descriptor();
         newDesc.name = "Primitive Type";
-        newDesc.properties = ["No properties as it's not an Object."];
+        newDesc.properties = ["No properties as it's not an object."];
         return newDesc;
     }
 
