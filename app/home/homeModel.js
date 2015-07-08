@@ -57,7 +57,7 @@ window.vjs = window.vjs || {};
                 return value instanceof Object;
             },
             getInstance: function () {
-                return new Object();
+                return {};
             },
             getExample: function() {
                 return "var foo = { };";
@@ -85,7 +85,7 @@ window.vjs = window.vjs || {};
                 return value instanceof Array;
             },
             getInstance: function () {
-                return new Array();
+                return [];
             },
             getExample: function() {
                 return "var foo = [1, 2, 3];";
@@ -234,7 +234,7 @@ window.vjs = window.vjs || {};
             this._currDescriptor = Descriptor.buildDescriptorForPrimitive();
 
         } else {
-            this._currDescriptor = Descriptor.buildDescriptor(this.currType.getTypeRef());
+            this._currDescriptor = Descriptor.buildDescriptor(this.currType.getInstance());
         }  
     }
 

@@ -20,7 +20,8 @@
         var newDesc = new Descriptor();
         //newDesc.parent = parentName || null;
         
-        if(!isPrimitive(obj)) {
+        // if(!isPrimitive(obj)) {
+        if(obj !== null && (typeof obj === 'object' || obj instanceof Object)) {    // functions are instance of object but typeof is function
             newDesc.name = getFunctionName(obj);
             newDesc.properties = Object.getOwnPropertyNames(obj);
             newDesc.children.push(buildDescriptor(Object.getPrototypeOf(obj), newDesc.name));
