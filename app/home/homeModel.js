@@ -202,8 +202,8 @@ window.vjs = window.vjs || {};
         // check if type is supported by app
        var isSupported = false, i = 0;
 
-       while(i < JS_TYPES.length && !isSupported) {
-        if(type === JS_TYPES[i].name) {
+       while(i < TYPES_REFERENCE.length && !isSupported) {
+        if(type === TYPES_REFERENCE[i].name) {
             isSupported = true;
         }
         i += 1;
