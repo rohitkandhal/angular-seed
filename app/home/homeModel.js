@@ -161,6 +161,7 @@ window.vjs = window.vjs || {};
         this.allTypes = JS_TYPES;
         this._currTypeId = 0;
         this._currDescriptor = new Descriptor();
+        this.useInstance = true;
         buildProtoGraph();
     }
 
@@ -174,7 +175,6 @@ window.vjs = window.vjs || {};
                 if(typeof val === 'number') {
                     this._currTypeId = val;
                     this.refreshCurrDescriptor();                    
-                    updateProtoTree(this.currDescriptor);
                 }
             }
         },
@@ -234,7 +234,10 @@ window.vjs = window.vjs || {};
             this._currDescriptor = Descriptor.buildDescriptorForPrimitive();
 
         } else {
-            this._currDescriptor = Descriptor.buildDescriptor(this.currType.getInstance());
+            this._currDescriptor = Descriptor.buildDescriptor(this.useInstance ? this.currType.getInstance() : this.currType.getTypeRef());
+
+            // Rebuild prototype tree
+            updateProtoTree(this.currDescriptor);
         }  
     }
 
@@ -242,6 +245,12 @@ window.vjs = window.vjs || {};
         return typeof inp;
     }
 
+    function setUseInstance(value) {
+        this.useInstance = value;
+        this.refreshCurrDescriptor();
+    }
+
+    // SVG TREE BUILDING USING D#
     var tree, diagonal, svg;
 
     function buildProtoGraph() {
@@ -326,6 +335,7 @@ window.vjs = window.vjs || {};
             .attr("y", 52)
             .style("fill-opacity", 1);
 
+        var j = 0;
         nodeProperties.selectAll("tspan")
             .data(function (d) {
                 return d.properties || [];
@@ -353,10 +363,13 @@ window.vjs = window.vjs || {};
             .attr("d", diagonal);
 
     }
+
+
     HomeModel.prototype.checkInstanceOf = checkInstanceOf;
     HomeModel.prototype.getTypeOf = getTypeOf;
     HomeModel.prototype.refreshCurrDescriptor = refreshCurrDescriptor;
     HomeModel.prototype.getColor = getColor;
     HomeModel.prototype.isPrimitive = isPrimitive;
+    HomeModel.prototype.setUseInstance = setUseInstance;
    
 }(window.vjs));

@@ -1,4 +1,10 @@
 <div ng-controller='HomeController as homeCtrl' ng-init="model = homeCtrl.homeModel">
+        <span class="text-left">Currently using <strong>{{model.useInstance ? "object" : "Constructor Functions"}}</strong></span>
+
+        <button type="button" class="btn btn-danger pull-right" ng-click="model.setUseInstance(false)">Use Constructor Functions</button> 
+        <span  class="pull-right">&nbsp&nbsp</span>
+        <button type="button" class="btn btn-primary pull-right" ng-click="model.setUseInstance(true)">Use object</button>
+        
         <form name="typeSelectForm" class="form-inline">
             <table class="table table-bordered">
                 <tr>
