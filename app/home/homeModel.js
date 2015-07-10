@@ -10,48 +10,53 @@ window.vjs = window.vjs || {};
         isObjectInstance = ns.utils.isObjectInstance,
         isPrimitive = ns.utils.isPrimitive;
 
-    var JS_TYPES = Object.freeze(
+    var TYPES_PRIMITIVE = Object.freeze(
+        [
+            {
+                name: '007',
+                getInstance: function () {
+                    return 007;
+                },
+                getExample: function() {
+                    return "var foo = 007;";
+                }
+            }, {
+                name: 'Hello World',
+                getInstance: function () {
+                    return "Hello World";
+                },
+                getExample: function() {
+                    return "var foo = \"Hello World\";";
+                }
+            }, {
+                name: 'true',
+                getInstance: function () {
+                    return true;
+                },
+                getExample: function() {
+                    return "var foo = true;";
+                }
+            }, {
+                name: 'null',
+                getInstance: function () {
+                    return null;
+                },
+                getExample: function() {
+                    return "var foo = null;";
+                }
+            }, {
+                name: 'undefined',
+                getInstance: function () {
+                    return undefined;
+                },
+                getExample: function() {
+                    return "var foo = undefined;";
+                }
+            }
+        ]);
+
+    var TYPES_REFERENCE = Object.freeze(
         [{
-            name: '007',
-            getInstance: function () {
-                return 007;
-            },
-            getExample: function() {
-                return "var foo = 007;";
-            }
-        }, {
-            name: 'Hello World',
-            getInstance: function () {
-                return "Hello World";
-            },
-            getExample: function() {
-                return "var foo = \"Hello World\";";
-            }
-        }, {
-            name: 'true',
-            getInstance: function () {
-                return true;
-            },
-            getExample: function() {
-                return "var foo = true;";
-            }
-        }, {
-            name: 'null',
-            getInstance: function () {
-                return null;
-            },
-            getExample: function() {
-                return "var foo = null;";
-            }
-        }, {
-            name: 'undefined',
-            getInstance: function () {
-                return undefined;
-            },
-            getExample: function() {
-                return "var foo = undefined;";
-            }
-        }, {
             name: 'Object',
             isInstanceOf: function(value) {
                 return value instanceof Object;
@@ -158,11 +163,12 @@ window.vjs = window.vjs || {};
         });
 
     function HomeModel() {
-        this.allTypes = JS_TYPES;
-        this._currTypeId = 0;
+        this.allTypes = TYPES_REFERENCE;
         this._currDescriptor = new Descriptor();
         this.useInstance = true;
+
         buildProtoGraph();
+        this.currTypeId = 0;
     }
 
     Object.defineProperties(HomeModel.prototype, {
