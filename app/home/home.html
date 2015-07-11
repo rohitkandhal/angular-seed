@@ -1,8 +1,12 @@
 <div ng-controller='HomeController as homeCtrl' ng-init="model = homeCtrl.homeModel">
         
         <div class="row">
-            <div class="pull-right">
-                <input  type='radio' 
+            <span class="checkbox">
+                  
+            </span>
+            <span class="pull-right">
+                <span >Show </span>
+                <input type='radio' 
                         ng-model='model.useInstance' 
                         ng-value='true' 
                         class=""
@@ -15,7 +19,10 @@
                         id="constructorRadio">                
                 </input>
                 <label for="constructorRadio"><kbd>Constructor Function</kbd></label>
-            </div>
+                <label>
+                    <input type="checkbox" ng-model="model.showPrimitive"> primitive</input>
+                </label>
+            </span>
         </div>
         
         <div class="row">

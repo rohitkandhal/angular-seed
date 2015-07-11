@@ -178,6 +178,7 @@ window.vjs = window.vjs || {};
         this.allTypes = TYPES_REFERENCE;
         this._currDescriptor = new Descriptor();
         this._useInstance = true;
+        this._showPrimitive = false;
 
         buildProtoGraph();
         this.currTypeId = 0;
@@ -223,6 +224,23 @@ window.vjs = window.vjs || {};
             }
         },
 
+        showPrimitive: {
+            get: function() {
+                return this._showPrimitive;
+            },
+
+            set: function(val) {
+                this._showPrimitive = val;
+                if(this.showPrimitive) {
+                    this.allTypes = TYPES_PRIMITIVE.concat(TYPES_REFERENCE);
+                    this.currTypeId = 5;
+                } else {
+                    this.allTypes = TYPES_REFERENCE;
+                    this.currTypeId = 0;
+                }
+            }
+        },
+
         currExampleString: {
             get: function () {
                 return this.currType.getExample(this.useInstance);
@@ -234,12 +252,14 @@ window.vjs = window.vjs || {};
         // check if type is supported by app
        var isSupported = false, i = 0;
 
-       while(i < TYPES_REFERENCE.length && !isSupported) {
-        if(type === TYPES_REFERENCE[i].name) {
-            isSupported = true;
-        }
-        i += 1;
-       }
+       if(this.allTypes) {
+        while(i < this.allTypes.length && !isSupported) {
+            if(type === this.allTypes[i].name) {
+                isSupported = true;
+            }
+            i += 1;
+           }
+        }      
 
        return isSupported;
     };
@@ -248,7 +268,7 @@ window.vjs = window.vjs || {};
        // returns if 'src' is instance of 'target' type
        var result = false, inpInstance = src.getInstance();
 
-       if(isTypeSupported(target.name)) {
+       if(isTypeSupported.call(this, target.name)) {
             // For primitive types instanceof will always be false 
             if(!isPrimitive(inpInstance) && !isPrimitive(target.getInstance())) {
                 result = target.isInstanceOf(inpInstance)
@@ -403,5 +423,4 @@ window.vjs = window.vjs || {};
     HomeModel.prototype.refreshCurrDescriptor = refreshCurrDescriptor;
     HomeModel.prototype.getColor = getColor;
     HomeModel.prototype.isPrimitive = isPrimitive;
-   
 }(window.vjs));
