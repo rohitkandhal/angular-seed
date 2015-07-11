@@ -1,10 +1,24 @@
 <div ng-controller='HomeController as homeCtrl' ng-init="model = homeCtrl.homeModel">
-        Currently using <strong>{{model.useInstance ? "object" : "Constructor functions"}}</strong>
-
-        <button type="button" class="btn btn-danger pull-right" ng-click="model.setUseInstance(false)">Use Constructor Functions</button> 
-        <span  class="pull-right">&nbsp&nbsp</span>
-        <button type="button" class="btn btn-primary pull-right" ng-click="model.setUseInstance(true)">Use object</button>
         
+        <div class="row">
+            <div class="pull-right">
+                <input  type='radio' 
+                        ng-model='model.useInstance' 
+                        ng-value='true' 
+                        class=""
+                        id="objectRadio">
+                </input>
+                <label for='objectRadio'><kbd>object type</kbd></label>
+                <input type='radio' 
+                        ng-model="model.useInstance" 
+                        ng-value='false' 
+                        id="constructorRadio">                
+                </input>
+                <label for="constructorRadio"><kbd>Constructor Function</kbd></label>
+            </div>
+        </div>
+        
+        <div class="row">
         <form name="typeSelectForm" class="form-inline">
             <table class="table table-bordered ">
                 <tr>
@@ -40,11 +54,12 @@
                         class='text-center'>
                         {{model.getTypeOf(type.getInstance())}}
                     </td>
-                <tr>
+                </tr>
             </table>            
         </form>
-        <h2 class='text-center'>{{model.currType.getExample()}}</h2>
-        <!-- placeholder for prototype graph tree -->        
+        </div>
+        <h2 class='text-center'><kbd>{{model.currExampleString}}</kbd></h2>
+        <!-- placeholder for prototype graph -->        
         <div class="treeContainer">
         
         </div>

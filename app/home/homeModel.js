@@ -55,6 +55,8 @@ window.vjs = window.vjs || {};
             }
         ]);
 
+    var out = 'var foo = '; // output string builder
+
     var TYPES_REFERENCE = Object.freeze(
         [{
             name: 'Object',
@@ -64,8 +66,10 @@ window.vjs = window.vjs || {};
             getInstance: function () {
                 return {};
             },
-            getExample: function() {
-                return "var foo = { };";
+            getExample: function(useInstance) {
+                var s = useInstance ? "{ };" : "Object;";
+
+                return out + s;
             },
             getTypeRef: function() {
                 return Object;
@@ -78,8 +82,10 @@ window.vjs = window.vjs || {};
             getInstance: function () {
                 return function abc() { return "hello world"; };
             },
-            getExample: function() {
-                return "var foo = function abc() { return \"hello world\"; };";
+            getExample: function(useInstance) {
+                var s = useInstance ? "function abc() { return \"hello world\"; };" : "Function;";
+
+                return out + s;
             },
             getTypeRef: function() {
                 return Function;
@@ -92,8 +98,10 @@ window.vjs = window.vjs || {};
             getInstance: function () {
                 return [];
             },
-            getExample: function() {
-                return "var foo = [1, 2, 3];";
+            getExample: function(useInstance) {
+                var s = useInstance ? "[1, 2, 3];" : "Array";
+
+                return out + s;
             },
             getTypeRef: function() {
                 return Array;
@@ -106,8 +114,9 @@ window.vjs = window.vjs || {};
             getInstance: function () {
                 return new Number(30);
             },
-            getExample: function() {
-                return "var foo = new Number(30);";
+            getExample: function(useInstance) {
+                var s = useInstance ? "new Number(30);" : "Number";
+                return out + s;
             },
             getTypeRef: function () {
                 return Number;
@@ -120,8 +129,9 @@ window.vjs = window.vjs || {};
             getInstance: function () {
                 return new String("Hello World");
             },
-            getExample: function() {
-                return "var foo = new String(\"Hello World\");";
+            getExample: function(useInstance) {
+                var s = useInstance ? "new String(\"Hello World\");" : "String";
+                return out + s;
             },
             getTypeRef: function() {
                 return String;
@@ -134,8 +144,9 @@ window.vjs = window.vjs || {};
             getInstance: function (){
                 return new Boolean(true);
             },
-            getExample: function() {
-                return "var foo = new Boolean(true);";
+            getExample: function(useInstance) {
+                var s = useInstance ? "new Boolean(true);" : "Boolean";
+                return out + s;
             },
             getTypeRef: function() {
                 return Boolean;
@@ -148,8 +159,9 @@ window.vjs = window.vjs || {};
             getInstance: function() {
                 return new RegExp(/[foo]+/);
             },
-            getExample: function() {
-                return "var foo = new RegExp(/[foo]+/);";
+            getExample: function(useInstance) {
+                var s = useInstance ? "new RegExp(/[foo]+/);" : "RegExp";
+                return out + s;
             },
             getTypeRef: function() {
                 return RegExp;
@@ -165,7 +177,7 @@ window.vjs = window.vjs || {};
     function HomeModel() {
         this.allTypes = TYPES_REFERENCE;
         this._currDescriptor = new Descriptor();
-        this.useInstance = true;
+        this._useInstance = true;
 
         buildProtoGraph();
         this.currTypeId = 0;
@@ -194,6 +206,26 @@ window.vjs = window.vjs || {};
         currDescriptor: {
             get: function() {
                 return this._currDescriptor;
+            }
+        },
+
+        useInstance: {
+            get: function() {
+                return this._useInstance;
+            },
+
+            set: function(val) {
+                if(typeof val === 'boolean') {
+                    this._useInstance = val;
+
+                    this.refreshCurrDescriptor();
+                }
+            }
+        },
+
+        currExampleString: {
+            get: function () {
+                return this.currType.getExample(this.useInstance);
             }
         }
     });
@@ -249,11 +281,6 @@ window.vjs = window.vjs || {};
 
     function getTypeOf(inp) {
         return typeof inp;
-    }
-
-    function setUseInstance(value) {
-        this.useInstance = value;
-        this.refreshCurrDescriptor();
     }
 
     // SVG TREE BUILDING USING D#
@@ -376,6 +403,5 @@ window.vjs = window.vjs || {};
     HomeModel.prototype.refreshCurrDescriptor = refreshCurrDescriptor;
     HomeModel.prototype.getColor = getColor;
     HomeModel.prototype.isPrimitive = isPrimitive;
-    HomeModel.prototype.setUseInstance = setUseInstance;
    
 }(window.vjs));
