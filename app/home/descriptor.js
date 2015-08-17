@@ -23,7 +23,7 @@
         // if(!isPrimitive(obj)) {
         if(obj !== null && (typeof obj === 'object' || obj instanceof Object)) {    // functions are instance of object but typeof is function
             newDesc.name = getFunctionName(obj);
-            newDesc.properties = Object.getOwnPropertyNames(obj);
+            newDesc.properties = getPublicProperties(obj);
             newDesc.children.push(buildDescriptor(Object.getPrototypeOf(obj), newDesc.name));
         } else {
             newDesc.name = "null";
@@ -31,6 +31,14 @@
         }
 
         return newDesc;
+    }
+
+    function getPublicProperties(obj) {
+        var props = Object.getOwnPropertyNames(obj);
+        // remove private property (assuming they start and end with _ )
+        return props.filter(function (str) {
+            return (str.search(/^_.*_$/) < 0);
+        });
     }
 
     function buildDescriptorForPrimitive() {

@@ -315,7 +315,7 @@ window.vjs = window.vjs || {};
                 top: 50,
                 right: 20,
                 bottom: 0,
-                left: 300
+                left: 250
             },
             width = parentWidth - margin.right - margin.left,
             height = 700 - margin.top - margin.bottom;
